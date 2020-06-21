@@ -1,0 +1,192 @@
+= Bonus! Using Helm Operators for Stateful Services
+
+* <<_helm_operator, Helm Operator>>
+* <<_build_an_operator_from_an_existing_chart, Build an Operator from an existing chart>>
+** <<_create_and_push_the_operator_container_image,Create and push the operator container image>>
+* <<_install_the_operator, Install the Operator>>
+* <<_work_with_your_new_operator, Work with your new operator>>
+* <<_license,License>>
+
+=== Helm Operator
+
+When it comes to stateful applications there is more to the upgrade process than upgrading the application itself.
+The landmark microservice is using a PostgreSQL database, which is a stateful load from Kubernetes point of view.
+This means that the PostgreSQL installation and maintenance should take into account dealing with the schema changes between database versions, which often requires dumping the data and re-importing it back to the new version of the database in a controlled manner so that client applications aren’t affected.
+
+In general, upgrading to a newer version of the charts for stateful applications needs to be treated with care: not all modifications are allowed.
+For example, in case of a StatefulSet increasing the volume size through volumeClaimTemplate would require recreating the current deployment.
+Another disruptive change is when the chart changes from using Deployment to StatefulSets.
+
+In the stateful application case , Helm Charts often are insufficient for upgrading their deployments and services.
+This is why you should look into pairing your existing Helm charts with an Operator in order to plug your apps into your Kubernetes cluster and gain Day 2 operations capabilities.
+
+The Operator needs to be installed on the cluster first, usually by a user with a privileged role.
+Multiple concurrent interactions on the same managed application are serialized and not blocked by a lock.
+Access to Operator services can be restricted  via regular RBAC on the Custom Resources.
+
+*Helm Operator* enables pairing a Helm Chart with the operational knowledge of installing, upgrading and managing the application on Kubernetes clusters.
+
+The Operator SDK, which is the tool for building operators, can create an operator based on a Helm Chart and essentially allow enriching the Helm Chart capabilities by delivering the expertise of managing and running the application together with the application.
+You can install the Operator SDK from https://github.com/operator-framework/operator-sdk/releases[here].
+
+=== Build an Operator from an existing chart
+
+First, let’s initialize the directory with everything required by the operator, by indicating that it will be an operator created from a Helm chart `— type=helm` and the actual helm chart to be used with `-- helm-chart`.
+[source, bash, subs="normal,attributes"]
+----
+$ operator-sdk new postgreql-operator --type=helm --helm-chart stable/postgresql
+$ tree postgreql-operator
+
+postgreql-operator/
+├── build
+│   └── Dockerfile
+├── deploy
+│   ├── crds
+│   │   ├── helm.operator-sdk_postgresqls_crd.yaml
+│   │   └── helm.operator-sdk_v1alpha1_postgresql_cr.yaml
+│   ├── operator.yaml
+│   ├── role.yaml
+│   ├── role_binding.yaml
+│   └── service_account.yaml
+├── helm-charts
+│   └── postgresql
+│       ├── Chart.yaml
+│       ├── README.md
+│       ├── ci
+│       │   ├── default-values.yaml
+│       │   └── shmvolume-disabled-values.yaml
+│       ├── files
+│       │   ├── README.md
+│       │   ├── conf.d
+│       │   │   └── README.md
+│       │   └── docker-entrypoint-initdb.d
+│       │       └── README.md
+│       ├── templates
+│       │   ├── NOTES.txt
+│       │   ├── _helpers.tpl
+│       │   ├── configmap.yaml
+│       │   ├── extended-config-configmap.yaml
+│       │   ├── initialization-configmap.yaml
+│       │   ├── metrics-configmap.yaml
+│       │   ├── metrics-svc.yaml
+│       │   ├── networkpolicy.yaml
+│       │   ├── prometheusrule.yaml
+│       │   ├── secrets.yaml
+│       │   ├── serviceaccount.yaml
+│       │   ├── servicemonitor.yaml
+│       │   ├── statefulset-slaves.yaml
+│       │   ├── statefulset.yaml
+│       │   ├── svc-headless.yaml
+│       │   ├── svc-read.yaml
+│       │   └── svc.yaml
+│       ├── values-production.yaml
+│       ├── values.schema.json
+│       └── values.yaml
+└── watches.yaml
+----
+
+Double check the RBAC rules of your Kubernetes/Openshift cluster and see if they meet the operator requirements.
+
+===== Create and push the operator container image
+
+The container image for your operator needs to be created and pushed to the local or remote registry.
+
+[source, bash, subs="normal,attributes"]
+----
+$ cat postgreql-operator/build/Dockerfile
+FROM quay.io/operator-framework/helm-operator:v0.18.1
+
+COPY watches.yaml ${HOME}/watches.yaml
+COPY helm-charts/ ${HOME}/helm-charts/
+----
+
+Go inside the operator folder and build the image:
+[source, bash, subs="normal,attributes"]
+----
+$ cd postgreql-operator
+$ sudo operator-sdk build postgreql-operator:v0.1
+$ docker images
+----
+
+Push the image into the registry, in this case the local Docker registry:
+[source, bash, subs="normal,attributes"]
+----
+$ docker tag postgreql-operator:v0.1
+$ docker push localhost:5000/postgreql-operator:v0.1
+----
+
+=== Install the Operator
+
+The preferred way to install an operator on OpenShift 4 cluster is using Operator Lifecycle Manager (OLM),
+since it makes it easier to install, upgrade, and grant access to Operators running on the cluster.
+
+Alternatively, you could skip OLM usage by just creating directly all resources from the deploy directory (oc create -f deploy/) after changing the image name in the deploy/operator.yaml file.
+
+Operator Lifecycle Manager (OLM) needs to create some files inside the directory to define the ClusterServiceVersion that represents the CRDs your Operator uses, the permissions it requires to function and other installation information:
+
+[source, bash, subs="normal,attributes"]
+----
+$ operator-sdk olm-catalog gen-csv — csv-version 0.0.1
+$ cat deploy/olm-catalog/postgreql-operator/0.0.1/postgreql-operator.v0.0.1.clusterserviceversion.yaml | grep “”image:
+image: REPLACE_IMAGE
+$ sed -i ‘s/REPLACE_IMAGE/localhost:5000/postgreql-operator:v0.1/’ deploy/olm-catalog/postgreql-operator/0.0.1/postgreql-operator.v0.0.1.clusterserviceversion.yaml
+$ cat deploy/olm-catalog/postgreql-operator/0.0.1/postgreql-operator.v0.0.1.clusterserviceversion.yaml | grep image:
+image: localhost:5000/postgreql-operator:v0.1
+----
+
+Set the namespace of the operator to `openshift-operators`:
+[source, bash, subs="normal,attributes"]
+----
+$ sed -i ‘s/namespace: placeholder/namespace: openshift-operators/’ deploy/olm-catalog/postgreql-operator/0.0.1/postgreql-operator.v0.0.1.clusterserviceversion.yaml
+$ sed -i ‘s#postgreqls.charts.helm.k8s.io#postgreqls.charts.helm.k8s.io\n displayName: PostgreSQL\n description: PostgreSQL new description#g’ deploy/olm-catalog/postgreql-operator/0.0.1/postgreql-operator.v0.0.1.clusterserviceversion.yaml
+----
+
+Deploy all the content of resources needed by the operator in the cluster
+
+[source, bash, subs="normal,attributes"]
+----
+$ oc project openshift-operators
+$ oc create -f deploy/crds/helm.operator-sdk_v1alpha1_postgresql_cr.yaml
+$ oc create -f deploy/service_account.yaml
+$ oc create -f deploy/role_binding.yaml
+$ oc create -f deploy/role.yaml
+$ oc create -f deploy/olm-catalog/postgresql-operator/0.0.1/postgresql-operator.v0.0.1.clusterserviceversion.yaml
+----
+
+Validate your actions by running:
+[source, bash, subs="normal,attributes"]
+----
+$ oc get pod -n openshift-operators
+----
+
+=== Work with your new operator
+
+When you created your operator, another Custom Resource was created.
+That will serve as a base to instantiate the operator:
+[source, bash, subs="normal,attributes"]
+----
+$cat postgreql-operator/deploy/crds/helm.operator-sdk_v1alpha1_postgresql_cr.yaml > custom-helm-operator-example.yaml
+----
+
+Modify the file you just created with your own values and deploy it.
+[source, bash, subs="normal,attributes"]
+----
+$ oc create -f custom-helm-operator-example.yaml
+$ oc get pod
+----
+
+The operation of modifying one yaml file is the only one that needs to be done to reuse the PosgreSQL charts across cluster.
+
+**
+Congratulations for completing this entire workshop successfully!
+**
+
+|===
+|https://github.com/ammbra/helm-openshift-workshopp/blob/develop/README.adoc[Navigate to global instructions]
+|===
+
+
+'''
+=== License
+
+This code is dedicated to the public domain to the maximum extent permitted by applicable law, pursuant to http://creativecommons.org/publicdomain/zero/1.0/[CC0].

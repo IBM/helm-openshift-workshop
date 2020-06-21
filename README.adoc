@@ -1,0 +1,119 @@
+= Helm3 OpenShift Workshop
+
+* <<_about_this_workskhop,About this workskhop>>
+* <<_prerequisites, Prerequisites>>
+* <<openshift-origin-v4-setup,OpenShift Origin v4 setup>>
+* <<_helm_setup,Helm Setup>>
+* <<_check_your_environment_readiness, Check your environment readiness >>
+* <<_compatibility,Compatibility>>
+* <<_license,License>>
+
+=== About this workskhop
+This repository contains the work related to Helm3 Openshift workshop.
+The example distributed application is composed of a visitor microservice that gets informations from another microservice responsible to store and retrieve landmarks.
+The landmark microservice persist its data in a database.
+
+Throughout the workshop the microservices will be deployed using three Helm charts technique:
+
+* https://github.com/ammbra/landmark[chart per service approach]
+* https://github.com/ammbra/landmark/tree/feature/leader-chart-lab[leader chart approach]
+* https://github.com/ammbra/visitor[hybrid chart approach]
+
+At the end of this workshop you should be able to understand and use Helm on an OpenShift v4.4+ edition.
+
+'''
+=== Prerequisites
+For this workshop code-ready containers will be used, which create a local single-VM Openshift 4 cluster on your laptop.
+
+Other pre-requirements that must be met in your system are:
+
+* https://git-scm.com/downloads[git]
+* https://docs.docker.com/install/[docker version 17.03+]
+* https://kubernetes.io/docs/tasks/tools/install-kubectl/[kubectl] version v1.11.3+ (or oc client).
+* https://golang.org/dl/[go] version v1.12+. (Optional if you aren’t installing from source)
+
+=== OpenShift Origin v4 setup
+
+In order to get started with OpenShift v4.x https://github.com/code-ready/crc[Code Ready Containers] will be used.
+You can download https://developers.redhat.com/products/codeready-containers[CodeReady Containers] from the product page.
+
+Please open any of the below links, depending on your OS to setup the downloaded Code Ready Containers:
+
+* https://developers.redhat.com/openshift/local-openshift-windows/[Windows]
+* https://developers.redhat.com/openshift/local-openshift-macos/[MacOS]
+
+=== Helm setup
+
+Helm is a packager for Kubernetes that bundles related manifest files and packages them into a single logical deployment unit: *Chart*.
+Simplified, for many engineers Helm makes it *easy* to start using Kubernetes with *real* applications.
+Helm Charts are useful for addressing the installation complexities and simple upgrades of particularly stateless applications like web apps.
+
+In v3, Helm is used entirely through the helm CLI.
+The Helm CLI is a utility usually run interactively outside of the cluster.
+
+Users find a chart for the desired software, parameterize its resources through Helm to deploy Kubernetes artifacts and this eventually brings up said software.
+
+Before diving into installing Helm, make sure you have installed Go, version 1.12 or higher.
+The bellow links describe how to install Helm on different platforms using the CLI:
+
+** https://docs.openshift.com/container-platform/4.4/cli_reference/helm_cli/getting-started-with-helm-on-openshift-container-platform.html#on-windows-10[On Windows 10]
+** https://docs.openshift.com/container-platform/4.4/cli_reference/helm_cli/getting-started-with-helm-on-openshift-container-platform.html#on-macos[On MacOS]
+
+Always validate your helm installation by running:
+
+[source, bash, subs="normal,attributes"]
+----
+$ helm version
+----
+'''
+
+=== Check your environment readiness
+Start your crc environment if it’s not already up.
+
+[source, bash, subs="normal,attributes"]
+----
+$ crc start
+INFO Checking if running as non-root
+INFO Checking if oc binary is cached
+INFO Checking if Virtualization is enabled
+INFO Checking if KVM is enabled
+INFO Checking if libvirt is installed
+INFO Checking if user is part of libvirt group
+INFO Checking if libvirt is enabled
+INFO Checking if libvirt daemon is running
+INFO Checking if crc-driver-libvirt is installed
+INFO Checking if libvirt ‘crc’ network is available
+INFO Checking if libvirt ‘crc’ network is active
+INFO Checking if NetworkManager is installed
+INFO Checking if NetworkManager service is running
+INFO Checking if /etc/NetworkManager/conf.d/crc-nm-dnsmasq.conf exists
+INFO Checking if /etc/NetworkManager/dnsmasq.d/crc.conf exists
+INFO Starting stopped VM …
+INFO Verifying validity of the cluster certificates …
+INFO Check internal and public dns query …
+INFO Starting OpenShift cluster … [waiting 3m]
+INFO
+INFO To access the cluster, first set up your environment by following ‘crc oc-env’ instructions
+INFO Then you can access it by running ‘oc login -u developer -p developer https://api.crc.testing:6443'
+INFO To login as an admin, username is ‘kubeadmin’ and password is XXXXXXXXXXXXXXXXXXXXXXX
+INFO
+INFO These credentials can also be used to access the OpenShift web console at https://console-openshift-console.apps-crc.testing
+CodeReady Containers instance is running
+----
+
+*Congratulations*! You are ready to code!
+
+Please follow the navigation links.
+|===
+ https://github.com/ammbra/landmark[Navigate to next exercise]
+|===
+
+'''
+=== Compatibility
+
+The Java code in the repositories is compatible with Java11.
+
+'''
+=== License
+
+This code is dedicated to the public domain to the maximum extent permitted by applicable law, pursuant to http://creativecommons.org/publicdomain/zero/1.0/[CC0].
