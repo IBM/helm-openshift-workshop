@@ -1,9 +1,9 @@
 = Helm3 OpenShift Workshop
 
-* <<_about_this_workskhop,About this workskhop>>
-* <<_prerequisites, Prerequisites>>
+* <<about_this_workskhop,About this workskhop>>
+* <<prerequisites, Prerequisites>>
 * <<openshift-origin-v4-setup,OpenShift Origin v4 setup>>
-* <<_helm_setup,Helm Setup>>
+* <<helm-setup,Helm Setup>>
 * <<check-your-environment-readiness, Check your environment readiness>>
 * <<compatibility,Compatibility>>
 * <<license,License>>
