@@ -4,9 +4,9 @@
 * <<_prerequisites, Prerequisites>>
 * <<openshift-origin-v4-setup,OpenShift Origin v4 setup>>
 * <<_helm_setup,Helm Setup>>
-* <<_check_your_environment_readiness, Check your environment readiness >>
-* <<_compatibility,Compatibility>>
-* <<_license,License>>
+* <<check_your_environment_readiness, Check your environment readiness>>
+* <<compatibility,Compatibility>>
+* <<license,License>>
 
 === About this workskhop
 This repository contains the work related to Helm3 Openshift workshop.
