@@ -4,7 +4,7 @@
 * <<_prerequisites, Prerequisites>>
 * <<openshift-origin-v4-setup,OpenShift Origin v4 setup>>
 * <<_helm_setup,Helm Setup>>
-* <<check_your_environment_readiness, Check your environment readiness>>
+* <<check-your-environment-readiness, Check your environment readiness>>
 * <<compatibility,Compatibility>>
 * <<license,License>>
 
