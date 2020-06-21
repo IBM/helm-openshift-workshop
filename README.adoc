@@ -18,6 +18,7 @@ Throughout the workshop the microservices will be deployed using three Helm char
 * https://github.com/ammbra/landmark[chart per service approach]
 * https://github.com/ammbra/landmark/tree/feature/leader-chart-lab[leader chart approach]
 * https://github.com/ammbra/visitor[hybrid chart approach]
+* <<bonus.adoc#, Bonus: Using Helm Operators for Stateful Services>>
 
 At the end of this workshop you should be able to understand and use Helm on an OpenShift v4.4+ edition.
 

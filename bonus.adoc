@@ -1,11 +1,11 @@
 = Bonus! Using Helm Operators for Stateful Services
 
-* <<_helm_operator, Helm Operator>>
-* <<_build_an_operator_from_an_existing_chart, Build an Operator from an existing chart>>
-** <<_create_and_push_the_operator_container_image,Create and push the operator container image>>
-* <<_install_the_operator, Install the Operator>>
-* <<_work_with_your_new_operator, Work with your new operator>>
-* <<_license,License>>
+* <<helm_operator, Helm Operator>>
+* <<build_an_operator_from_an_existing_chart, Build an Operator from an existing chart>>
+** <<create_and_push_the_operator_container_image,Create and push the operator container image>>
+* <<install_the_operator, Install the Operator>>
+* <<work_with_your_new_operator, Work with your new operator>>
+* <<license,License>>
 
 === Helm Operator
 
@@ -182,7 +182,7 @@ Congratulations for completing this entire workshop successfully!
 **
 
 |===
-|https://github.com/ammbra/helm-openshift-workshopp/blob/develop/README.adoc[Navigate to global instructions]
+|https://github.com/ammbra/helm-openshift-workshop/blob/develop/README.adoc[Navigate to global instructions]
 |===
 
 
