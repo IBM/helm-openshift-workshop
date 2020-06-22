@@ -115,6 +115,15 @@ $ docker tag postgreql-operator:v0.1
 $ docker push localhost:5000/postgreql-operator:v0.1
 ----
 
+However, the operator image must be available on a private registry,https://hub.docker.com/repositories[Docker Hub] or quay.io. For example, below are the commands for https://hub.docker.com/repositories[Docker Hub]:
+
+[source, bash, subs="normal,attributes"]
+----
+$ docker login
+$ docker tag postgreql-operator:v0.1 <USERNAME>/postgreql:v0.1
+$ docker push <USERNAME>/postgreql-operator:v0.1
+----
+
 === Install the Operator
 
 The preferred way to install an operator on OpenShift 4 cluster is using Operator Lifecycle Manager (OLM),
