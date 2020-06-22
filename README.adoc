@@ -13,7 +13,7 @@ This repository contains the work related to Helm3 Openshift workshop.
 The example distributed application is composed of a visitor microservice that gets informations from another microservice responsible to store and retrieve landmarks.
 The landmark microservice persist its data in a database.
 
-Throughout the workshop the microservices will be deployed using three Helm charts technique:
+Throughout the workshop the microservices will be deployed using three Helm charts techniques (click on each URL below to reach each of them):
 
 * https://github.com/ammbra/landmark[chart per service approach]
 * https://github.com/ammbra/landmark/tree/feature/leader-chart-lab[leader chart approach]
