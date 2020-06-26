@@ -1,4 +1,4 @@
-= Helm3 OpenShift Workshop
+= Helm3 Your OpenShift 
 
 * <<about_this_workskhop,About this workskhop>>
 * <<prerequisites, Prerequisites>>
@@ -10,17 +10,17 @@
 
 === About this workskhop
 This repository contains the work related to Helm3 Openshift workshop.
-The example distributed application is composed of a visitor microservice that gets informations from another microservice responsible to store and retrieve landmarks.
-The landmark microservice persist its data in a database.
+As this workshop, the shared experience of travel brings people together. As a visitor you have the opportunity to see different landmarks; in this workshop a  microservice containing landmarks informations will be deployed via Helm Charts and will have its data persisted in a database (also managed with Helm Charts). The visitor microservice will get the informations about a landmark at a certain address via an API endpoint exposed by the deployed landmark microservice.
 
-Throughout the workshop the microservices will be deployed using three Helm charts techniques (click on each URL below to reach each of them):
+Throughout this workshop you will improve your knowledge on deploying Java based applications using three Helm charts techniques (click on each URL below to reach each of them):
 
 * https://github.com/ammbra/landmark[chart per service approach]
 * https://github.com/ammbra/landmark/tree/feature/leader-chart-lab[leader chart approach]
 * https://github.com/ammbra/visitor[hybrid chart approach]
 * <<bonus.adoc#, Bonus: Using Helm Operators for Stateful Services>>
 
-At the end of this workshop you should be able to understand and use Helm on an OpenShift v4.4+ edition.
+At the end of this workshop you should be able to understand and use Helm on an OpenShift v4.4+ edition. 
+Happy travelling through each of the sections!
 
 '''
 === Prerequisites
