@@ -48,6 +48,7 @@ Please open any of the below links, depending on your OS to setup the downloaded
 Helm is a packager for Kubernetes that bundles related manifest files and packages them into a single logical deployment unit: *Chart*.
 Simplified, for many engineers Helm makes it *easy* to start using Kubernetes with *real* applications.
 Helm Charts are useful for addressing the installation complexities and simple upgrades of particularly stateless applications like web apps.
+Say goodbye to the many, long, hard-coded yaml files and embrace an easier way to manage your deployed applications!
 
 In v3, Helm is used entirely through the helm CLI.
 The Helm CLI is a utility usually run interactively outside of the cluster.
