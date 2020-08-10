@@ -1,5 +1,7 @@
 = Helm3 Your OpenShift 
 
+:home: https://github.com/ammbra
+
 * <<about_this_workskhop,About this workskhop>>
 * <<prerequisites, Prerequisites>>
 * <<openshift-origin-v4-setup,OpenShift Origin v4 setup>>
@@ -14,9 +16,9 @@ As this workshop, the shared experience of travel brings people together. As a v
 
 Throughout this workshop you will improve your knowledge on deploying Java based applications using three Helm charts techniques (click on each URL below to reach each of them):
 
-* https://github.com/ammbra/landmark[chart per service approach]
-* https://github.com/ammbra/landmark/tree/feature/leader-chart-lab[leader chart approach]
-* https://github.com/ammbra/visitor[hybrid chart approach]
+* {home}/landmark[chart per service approach]
+* {home}/landmark/tree/feature/leader-chart-lab[leader chart approach]
+* {home}/visitor[hybrid chart approach]
 * <<bonus.adoc#, Bonus: Using Helm Operators for Stateful Services>>
 
 At the end of this workshop you should be able to understand and use Helm on an OpenShift v4.4+ edition. 
@@ -107,7 +109,7 @@ CodeReady Containers instance is running
 
 Please follow the navigation links.
 |===
- https://github.com/ammbra/landmark[Navigate to next exercise]
+ {home}/landmark[Navigate to next exercise]
 |===
 
 '''
