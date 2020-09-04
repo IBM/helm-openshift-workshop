@@ -1,6 +1,6 @@
 = Bonus! Using Helm Operators for Stateful Services
 
-:home: https://github.com/IBM
+:homepage: https://github.com/IBM
 
 * <<helm_operator, Helm Operator>>
 * <<build_an_operator_from_an_existing_chart, Build an Operator from an existing chart>>
@@ -193,7 +193,7 @@ Congratulations for completing this entire workshop successfully!
 **
 
 |===
-|{home}/helm-openshift-workshop/blob/develop/README.adoc[Navigate to global instructions]
+|{homepage}/helm-openshift-workshop/blob/develop/README.adoc[Navigate to global instructions]
 |===
 
 
